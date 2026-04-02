@@ -62,9 +62,9 @@ export default function StatsPanel({
         </div>
         <div className="space-y-1.5">
           {eventsBreakdown.map(({ label, value }) => (
-            <div key={label} className="flex items-baseline justify-between">
+            <div key={label} className="flex items-baseline gap-2">
+              <span className="text-xs text-stone-400 w-12">/ {label}</span>
               <span className="text-sm font-bold text-stone-800">{value.toLocaleString()}</span>
-              <span className="text-xs text-stone-400">/ {label}</span>
             </div>
           ))}
         </div>

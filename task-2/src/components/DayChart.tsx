@@ -9,16 +9,19 @@ import {
 
 interface Props {
   exemplaryDayPower: number[];
+  className?: string;
 }
 
-export default function DayChart({ exemplaryDayPower }: Props) {
+export default function DayChart({ exemplaryDayPower, className }: Props) {
   const data = exemplaryDayPower.map((kw, i) => ({
     time: tickToTime(i),
     kw: Math.round(kw * 10) / 10,
   }));
 
+  const xTicks = Array.from({ length: 12 }, (_, i) => tickToTime(i * 8));
+
   return (
-    <div className="bg-white rounded-xl p-6 shadow-sm ">
+    <div className={`bg-white rounded-xl p-6 shadow-sm ${className ?? ""}`}>
       <div className="mb-6 space-y-1">
         <h2 className="text-xs font-semibold uppercase tracking-widest text-stone-400">
           Exemplary Day
@@ -40,7 +43,7 @@ export default function DayChart({ exemplaryDayPower }: Props) {
             tick={{ fontSize: 11, fill: "#a8a29e" }}
             tickLine={false}
             axisLine={false}
-            interval={7}
+            ticks={xTicks}
           />
           <YAxis
             tick={{ fontSize: 11, fill: "#a8a29e" }}
