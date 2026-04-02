@@ -7,7 +7,7 @@ const TICK_DURATION_HOURS = 0.25; // 15 minutes
 export interface SimulationParams {
   numChargepoints: number;
   arrivalMultiplier: number; // 0.2–2.0, scales arrival probability
-  consumptionKwhPer100km: number;
+  consumptionKwh: number;
   chargingPowerKw: number;
   seed?: number;
 }
@@ -21,8 +21,8 @@ export interface SimulationResult {
   exemplaryDayPower: number[]; // average kW per 15-min slot across all days
 }
 
-function kmToKwh(km: number, consumptionKwhPer100km: number): number {
-  return (km * consumptionKwhPer100km) / 100;
+function kmToKwh(km: number, consumptionKwh: number): number {
+  return (km * consumptionKwh) / 100;
 }
 
 function kwhToTicks(kwh: number, chargingPowerKw: number): number {
@@ -56,7 +56,7 @@ export function simulate(params: SimulationParams): SimulationResult {
   const {
     numChargepoints,
     arrivalMultiplier,
-    consumptionKwhPer100km,
+    consumptionKwh,
     chargingPowerKw,
     seed,
   } = params;
@@ -88,7 +88,7 @@ export function simulate(params: SimulationParams): SimulationResult {
         const km = sampleChargingDemand(rng());
         if (km > 0) {
           chargepoints[i] = kwhToTicks(
-            kmToKwh(km, consumptionKwhPer100km),
+            kmToKwh(km, consumptionKwh),
             chargingPowerKw,
           );
           chargingEvents++;
