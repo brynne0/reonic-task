@@ -52,6 +52,70 @@ function createRng(seed: number): () => number {
   };
 }
 
+export interface ChargePointGroup {
+  count: number;
+  powerKw: number;
+}
+
+export function simulateWithGroups(
+  groups: ChargePointGroup[],
+  params: Omit<SimulationParams, "numChargepoints" | "chargingPowerKw">,
+): SimulationResult {
+  // Expand groups into a flat array of per-chargepoint power levels
+  const powerLevels = groups.flatMap(({ count, powerKw }) =>
+    Array(count).fill(powerKw),
+  ) as number[];
+
+  const { arrivalMultiplier, consumptionKwh, seed } = params;
+  const rng = seed !== undefined ? createRng(seed) : Math.random;
+
+  const chargepoints = new Array<number>(powerLevels.length).fill(0);
+
+  let totalEnergyKwh = 0;
+  let actualMaxPowerKw = 0;
+  let chargingEvents = 0;
+  const dayPowerTotals = new Array<number>(TICKS_PER_DAY).fill(0);
+
+  for (let tick = 0; tick < TICKS_PER_YEAR; tick++) {
+    const hour = Math.floor((tick % TICKS_PER_DAY) / 4);
+    const arrivalProbability = ARRIVAL_PROBABILITY_PER_TICK[hour]! * arrivalMultiplier;
+
+    let tickPowerKw = 0;
+
+    for (let i = 0; i < powerLevels.length; i++) {
+      const power = powerLevels[i]!;
+
+      if (chargepoints[i]! > 0) {
+        chargepoints[i] = chargepoints[i]! - 1;
+      }
+
+      if (chargepoints[i] === 0 && rng() < arrivalProbability) {
+        const km = sampleChargingDemand(rng());
+        if (km > 0) {
+          chargepoints[i] = kwhToTicks(kmToKwh(km, consumptionKwh), power);
+          chargingEvents++;
+        }
+      }
+
+      if (chargepoints[i]! > 0) {
+        tickPowerKw += power;
+      }
+    }
+
+    totalEnergyKwh += tickPowerKw * TICK_DURATION_HOURS;
+    dayPowerTotals[tick % TICKS_PER_DAY]! += tickPowerKw;
+    if (tickPowerKw > actualMaxPowerKw) {
+      actualMaxPowerKw = tickPowerKw;
+    }
+  }
+
+  const theoreticalMaxPowerKw = powerLevels.reduce((sum, p) => sum + p, 0);
+  const concurrencyFactor = actualMaxPowerKw / theoreticalMaxPowerKw;
+  const exemplaryDayPower = dayPowerTotals.map((total) => total / 365);
+
+  return { totalEnergyKwh, theoreticalMaxPowerKw, actualMaxPowerKw, concurrencyFactor, chargingEvents, exemplaryDayPower };
+}
+
 export function simulate(params: SimulationParams): SimulationResult {
   const {
     numChargepoints,
