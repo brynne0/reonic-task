@@ -1,0 +1,40 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Simulation {
+  id                String            @id @default(cuid())
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  numChargepoints   Int               @default(20)
+  arrivalMultiplier Float             @default(1.0)
+  consumptionKwh    Float             @default(18)
+  chargingPowerKw   Float             @default(11)
+
+  result            SimulationResult?
+}
+
+model SimulationResult {
+  id                  String     @id @default(cuid())
+  createdAt           DateTime   @default(now())
+
+  simulationId        String     @unique
+  simulation          Simulation @relation(fields: [simulationId], references: [id], onDelete: Cascade)
+
+  totalEnergyKwh      Float
+  chargingEventsYear  Int
+  chargingEventsMonth Int
+  chargingEventsWeek  Int
+  chargingEventsDay   Int
+  concurrencyFactor   Float
+  actualMaxPowerKw    Float
+
+  // 96-slot array of averaged kW values (15-min intervals over an exemplary day)
+  exemplaryDayKw      Json
+}
