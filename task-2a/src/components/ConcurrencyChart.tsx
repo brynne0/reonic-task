@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { simulate } from "../simulation/simulate";
 
@@ -6,17 +5,13 @@ interface Props {
   className?: string;
 }
 
-const BASELINE_PARAMS = { arrivalMultiplier: 1.0, consumptionKwh: 18, seed: 42 };
+const data = Array.from({ length: 30 }, (_, i) => {
+  const n = i + 1;
+  const result = simulate({ arrivalMultiplier: 1.0, consumptionKwh: 18, seed: 42, numChargepoints: n, chargingPowerKw: 11 });
+  return { n, concurrency: Math.round(result.concurrencyFactor * 1000) / 10 };
+});
 
 export default function ConcurrencyChart({ className }: Props) {
-  const data = useMemo(() =>
-    Array.from({ length: 30 }, (_, i) => {
-      const n = i + 1;
-      const result = simulate({ ...BASELINE_PARAMS, numChargepoints: n, chargingPowerKw: 11 });
-      return { n, concurrency: Math.round(result.concurrencyFactor * 1000) / 10 };
-    }),
-    [],
-  );
 
   return (
     <div className={`bg-white rounded-xl p-6 shadow-sm ${className ?? ""}`}>
