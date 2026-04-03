@@ -62,7 +62,7 @@ export default function ChargeGroupPanel({ groups, onChange }: Props) {
             <button
               onClick={() => removeGroup(i)}
               disabled={groups.length === 1}
-              className="text-stone-300 hover:text-red-400 disabled:opacity-30 transition-colors cursor-pointer"
+              className="text-stone-400 hover:text-red-400 disabled:opacity-30 transition-colors cursor-pointer"
             >
               <Trash2 size={15} />
             </button>
