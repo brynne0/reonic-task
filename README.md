@@ -1,8 +1,8 @@
-# Reonic Coding Task
+## Reonic Coding Task 🚙
 
 Brynne O'Brien
 
-## Task 1 — Simulation Logic
+### Task 1 — Simulation Logic
 
 TypeScript and Node.js
 
@@ -18,7 +18,7 @@ npm start
 - I chose to ignore DST as the effect on annual totals is negligible (2 hours out of 8,760). Moving clocks forward loses 4 ticks (92 vs 96), moving clocks back gains 4 (100 vs 96). Both are in the 0.94% arrival band and net to zero across the year.
 - Seeded RNG (xorshift, seed 42) used throughout for reproducible results. Without a seed, the simulation produces different results each time, making outputs difficult to compare across chargepoint counts.
 
-## Task 2a — Frontend
+### Task 2a — Frontend
 
 React, TypeScript and Tailwind
 
@@ -31,7 +31,7 @@ npm run dev
 - Standard mode: configure chargepoints, arrival multiplier, consumption, charging power and view live stats with exemplary day chart
 - Custom mode (bonus): create mixed chargepoint groups and view concurrency factor across 1–30 chargepoints
 
-## Task 2b — Backend
+### Task 2b — Backend
 
 TypeScript, Node.js, GraphQL, Prisma, PostgreSQL and Docker
 
