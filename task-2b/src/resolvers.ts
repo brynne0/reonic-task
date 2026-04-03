@@ -98,7 +98,7 @@ export const resolvers = {
         chargingEventsMonth: Math.round(raw.chargingEvents / 12),
         chargingEventsWeek: Math.round(raw.chargingEvents / 52),
         chargingEventsDay: Math.round(raw.chargingEvents / 365),
-        exemplaryDayKw: raw.exemplaryDayPower,
+        exemplaryDayKw: raw.exemplaryDayPower.map((v) => Math.round(v * 100) / 100),
       };
 
       // Upsert so re-running a simulation replaces the old result rather than creating a duplicate

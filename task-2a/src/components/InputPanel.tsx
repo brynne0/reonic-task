@@ -132,11 +132,12 @@ function Slider({
       </div>
       <div
         ref={trackRef}
-        className="relative h-1.5 bg-stone-200 rounded-full cursor-pointer"
+        className="relative h-4 cursor-pointer flex items-center"
         onMouseDown={handleMouseDown}
       >
+        <div className="absolute w-full h-1.5 bg-stone-200 rounded-full pointer-events-none" />
         <div
-          className="absolute h-full bg-emerald-800 rounded-full pointer-events-none"
+          className="absolute h-1.5 bg-emerald-800 rounded-full pointer-events-none"
           style={{ width: `${percent}%` }}
         />
         <div
