@@ -92,6 +92,7 @@ export const resolvers = {
       const output = {
         totalEnergyKwh: raw.totalEnergyKwh,
         actualMaxPowerKw: raw.actualMaxPowerKw,
+        theoreticalMaxPowerKw: raw.theoreticalMaxPowerKw,
         concurrencyFactor: raw.concurrencyFactor,
         chargingEventsYear: raw.chargingEvents,
         chargingEventsMonth: Math.round(raw.chargingEvents / 12),

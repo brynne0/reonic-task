@@ -34,6 +34,7 @@ model SimulationResult {
   chargingEventsDay   Int
   concurrencyFactor   Float
   actualMaxPowerKw    Float
+  theoreticalMaxPowerKw Float
 
   // 96-slot array of averaged kW values (15-min intervals over an exemplary day)
   exemplaryDayKw      Json

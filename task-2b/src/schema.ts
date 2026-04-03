@@ -20,6 +20,7 @@ export const typeDefs = /* GraphQL */ `
     chargingEventsDay: Int!
     concurrencyFactor: Float!
     actualMaxPowerKw: Float!
+    theoreticalMaxPowerKw: Float!
     exemplaryDayKw: [Float!]!
   }
 
